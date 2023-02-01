@@ -1,4 +1,4 @@
-import { walletType } from '../actions';
+import { walletType, moedasStarted, moedasSucess, moedasFail } from '../actions';
 
 // função reducer faz o mesmo trabalho que o setstate. O reducer modifica o state.
 
@@ -7,6 +7,8 @@ const INITIAL_STATE_WALLET = {
   expenses: [],
   editor: false,
   idToEdit: 0,
+  errorMessage: '',
+  isFetchingMoedas: false,
 };
 
 const wallet = (state = INITIAL_STATE_WALLET, action) => {
@@ -14,7 +16,24 @@ const wallet = (state = INITIAL_STATE_WALLET, action) => {
   case walletType:
     return {
       ...state,
-      ...action.payload,
+      expenses: { ...action.payload },
+    };
+  case moedasStarted:
+    return {
+      ...state,
+      isFetchingMoedas: true,
+    };
+  case moedasSucess:
+    return {
+      ...state,
+      isFetchingMoedas: false,
+      currencies: Object.values({ ...action.payload }),
+    };
+  case moedasFail:
+    return {
+      ...state,
+      isFetchingMoedas: false,
+      errorMessage: action.payload,
     };
   default:
     return state;
