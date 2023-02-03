@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { moedasAPI, addExpensesAPI } from '../redux/actions';
+import Table from './Table';
 
 const INITIAL_STATE = {
   id: 0,
@@ -112,39 +113,9 @@ class WalletForm extends Component {
 
           </button>
         </form>
-        {/* <section>
-          <h2>Tabela de Despesas</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Pagamento</th>
-                <th>Moeda</th>
-                <th>Câmbio</th>
-                <th>Valor Convertido</th>
-                <th>Moeda de Conversão</th>
-                <th>Tag</th>
-                <th>Excluir</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td></td>
-                <td>{descricaoSalva}</td>
-                <td>{valorSalvo}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </section> */}
-
+        <section>
+          <Table />
+        </section>
       </div>
     );
   }

@@ -65,7 +65,5 @@ export const addExpensesAPI = (expenses) => async (dispatch) => {
         exchangeRates: data,
       }));
       dispatch(addTotal(expenses.value, cotacao));
-      console.log(expenses.value);
-      console.log(cotacao);
     });
 };
