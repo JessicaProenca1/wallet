@@ -36,10 +36,15 @@ class WalletForm extends Component {
       id: prevState.id + 1,
     }));
     dispatch(addExpensesAPI({ ...this.state }));
+    this.setState({
+      value: '',
+      description: '',
+    });
   };
 
   render() {
     const { isFetchingMoedas, currencies } = this.props;
+    const { value, description } = this.state;
     if (isFetchingMoedas) return <p>Carregando Carteira</p>;
     return (
       <div>
@@ -51,6 +56,7 @@ class WalletForm extends Component {
             onChange={ this.salvaState }
             placeholder="Digite o valor"
             name="value"
+            value={ value }
           />
 
           <input
@@ -60,13 +66,14 @@ class WalletForm extends Component {
             onChange={ this.salvaState }
             placeholder="Digite a descrição da despesa"
             name="description"
+            value={ description }
           />
 
           <select
             label="Moeda: "
             data-testid="currency-input"
             name="currency"
-            onChange={ this.salvaState }
+            onBlur={ this.salvaState }
           >
             {
               currencies.map((option, index) => (
@@ -79,7 +86,7 @@ class WalletForm extends Component {
             label="Forma de Pagamento: "
             data-testid="method-input"
             name="method"
-            onChange={ this.salvaState }
+            onBlur={ this.salvaState }
           >
             <option> Dinheiro </option>
             <option> Cartão de crédito </option>
@@ -90,7 +97,7 @@ class WalletForm extends Component {
             label="Categoria: "
             data-testid="tag-input"
             name="tag"
-            onChange={ this.salvaState }
+            onBlur={ this.salvaState }
           >
             <option> Alimentação </option>
             <option> Lazer </option>
@@ -146,7 +153,6 @@ class WalletForm extends Component {
 const mapStateToProps = (state) => ({
   isFetchingMoedas: state.wallet.isFetchingMoedas,
   currencies: state.wallet.currencies,
-
 });
 
 WalletForm.propTypes = {

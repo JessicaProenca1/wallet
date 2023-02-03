@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 
 class Header extends Component {
   render() {
-    const { email, value } = this.props;
+    const { email, total } = this.props;
+    // criar nova action disparada pelo click. Criar reducer para ela e nesse reducer fazer a logica da soma.
     return (
       <div>
         <h1>Minhas Despesas</h1>
         <h3 data-testid="email-field">{ email }</h3>
-        <h3 data-testid="total-field">{value}</h3>
+        <h3 data-testid="total-field">{ total }</h3>
         <h3 data-testid="header-currency-field">BRL</h3>
       </div>
     );
@@ -18,14 +19,12 @@ class Header extends Component {
 
 const mapStateToProps = (state) => ({
   email: state.user.email,
-  value: state.wallet.value,
-
+  total: state.wallet.total,
 });
 
 Header.propTypes = {
   email: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-
+  total: PropTypes.number.isRequired,
 };
 
 export default connect(mapStateToProps)(Header);

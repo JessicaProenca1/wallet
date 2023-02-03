@@ -5,6 +5,7 @@ export const moedasSucess = 'moedasSucess';
 export const moedasFail = 'moedasFail';
 export const stateDados = 'stateDados';
 export const ADD_EXPENSES = 'ADD_EXPENSES';
+export const ADD_TOTAL = 'ADD_TOTAL';
 
 export const loginAction = (emailsalvo) => ({
   type: email,
@@ -14,6 +15,11 @@ export const loginAction = (emailsalvo) => ({
 export const addExpenses = (add) => ({
   type: ADD_EXPENSES,
   payload: add,
+});
+
+export const addTotal = (value, ask) => ({
+  type: ADD_TOTAL,
+  payload: { value, ask },
 });
 
 export const moeda = (moedas) => ({
@@ -51,6 +57,15 @@ export const addExpensesAPI = (expenses) => async (dispatch) => {
     .then((response) => response.json())
     .then((data) => {
       delete data.USDT;
-      dispatch(addExpenses({ ...expenses, exchangeRates: data }));
+      const dadosCode = Object.values(data)
+        .find((code) => code.code === expenses.currency);
+      const cotacao = dadosCode.ask;
+      dispatch(addExpenses({
+        ...expenses,
+        exchangeRates: data,
+      }));
+      dispatch(addTotal(expenses.value, cotacao));
+      console.log(expenses.value);
+      console.log(cotacao);
     });
 };

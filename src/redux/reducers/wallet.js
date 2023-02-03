@@ -3,7 +3,8 @@ import {
   moedasSucess,
   moedasFail,
   moedaCode,
-  ADD_EXPENSES } from '../actions';
+  ADD_EXPENSES,
+  ADD_TOTAL } from '../actions';
 
 // função reducer faz o mesmo trabalho que o setstate. O reducer modifica o state.
 
@@ -14,6 +15,7 @@ const INITIAL_STATE_WALLET = {
   idToEdit: 0,
   errorMessage: '',
   isFetchingMoedas: false,
+  total: 0,
 };
 
 const wallet = (state = INITIAL_STATE_WALLET, action) => {
@@ -22,6 +24,14 @@ const wallet = (state = INITIAL_STATE_WALLET, action) => {
     return {
       ...state,
       expenses: [...state.expenses, action.payload],
+    };
+  case ADD_TOTAL:
+    return {
+      ...state,
+      total: parseFloat((state.total
+        + (parseFloat(action.payload.value) * parseFloat(action.payload.ask)))
+        .toFixed(2)),
+
     };
   case moedaCode:
     return {
