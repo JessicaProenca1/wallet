@@ -28,10 +28,8 @@ const wallet = (state = INITIAL_STATE_WALLET, action) => {
   case ADD_TOTAL:
     return {
       ...state,
-      total: parseFloat((state.total
-        + (parseFloat(action.payload.value) * parseFloat(action.payload.ask)))
-        .toFixed(2)),
-
+      total: (state.total
+        + (parseFloat(action.payload.value) * parseFloat(action.payload.ask))),
     };
   case moedaCode:
     return {
