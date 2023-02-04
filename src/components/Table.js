@@ -9,10 +9,6 @@ class Table extends Component {
     const { id } = event.target;
     const { dispatch, expenses } = this.props;
     const newexpenses = expenses.filter((gasto) => gasto.id !== Number(id));
-    newexpenses.map((newgasto, index) => {
-      newgasto.id = index;
-      return newgasto;
-    });
     dispatch(deletar(newexpenses));
   };
 
@@ -37,11 +33,11 @@ class Table extends Component {
             </tr>
           </thead>
           <tbody>
-            {expenses.map((gasto, index) => {
+            {expenses.map((gasto) => {
               const code = Object.values(gasto.exchangeRates);
               const moeda = code.find((sigla) => (sigla.code === gasto.currency));
               return (
-                <tr key={ index }>
+                <tr key={ gasto.description }>
                   <td>{parseFloat(gasto.value).toFixed(2)}</td>
                   <td>{gasto.description}</td>
                   <td>{gasto.method}</td>
