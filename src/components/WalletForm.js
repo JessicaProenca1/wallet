@@ -44,9 +44,9 @@ class WalletForm extends Component {
   };
 
   render() {
-    const { isFetchingMoedas, currencies } = this.props;
+    const { currencies } = this.props;
     const { value, description } = this.state;
-    if (isFetchingMoedas) return <p>Carregando Carteira</p>;
+    // if (isFetchingMoedas) return <p>Carregando Carteira</p>;
     return (
       <div>
         <form>
@@ -108,6 +108,7 @@ class WalletForm extends Component {
           </select>
           <button
             onClick={ this.handleClick }
+            data-testid="add-button"
           >
             Adicionar despesa
 
@@ -127,7 +128,7 @@ const mapStateToProps = (state) => ({
 });
 
 WalletForm.propTypes = {
-  isFetchingMoedas: PropTypes.bool.isRequired,
+  // isFetchingMoedas: PropTypes.bool.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
