@@ -6,6 +6,7 @@ export const moedasFail = 'moedasFail';
 export const stateDados = 'stateDados';
 export const ADD_EXPENSES = 'ADD_EXPENSES';
 export const ADD_TOTAL = 'ADD_TOTAL';
+export const DELETE = 'DELETE';
 
 export const loginAction = (emailsalvo) => ({
   type: email,
@@ -20,6 +21,11 @@ export const addExpenses = (add) => ({
 export const addTotal = (value, ask) => ({
   type: ADD_TOTAL,
   payload: { value, ask },
+});
+
+export const deletar = (apagar) => ({
+  type: DELETE,
+  payload: apagar,
 });
 
 export const moeda = (moedas) => ({
