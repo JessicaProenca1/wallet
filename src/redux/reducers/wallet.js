@@ -16,7 +16,7 @@ const INITIAL_STATE_WALLET = {
   idToEdit: 0,
   errorMessage: '',
   isFetchingMoedas: false,
-  total: 0,
+  total: 0.00,
 };
 
 const wallet = (state = INITIAL_STATE_WALLET, action) => {
@@ -29,13 +29,14 @@ const wallet = (state = INITIAL_STATE_WALLET, action) => {
   case ADD_TOTAL:
     return {
       ...state,
-      total: (state.total
-        + (parseFloat(action.payload.value) * parseFloat(action.payload.ask))),
+      total: (state.total)
+        + (parseFloat(action.payload.value) * parseFloat(action.payload.ask)),
     };
   case DELETE:
     return {
       ...state,
-      expenses: action.payload,
+      expenses: action.payload.novasDespesas,
+      total: Math.abs(state.total - parseFloat(action.payload.totalDeletar)),
 
     };
   case moedaCode:

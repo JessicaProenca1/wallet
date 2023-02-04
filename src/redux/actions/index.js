@@ -23,9 +23,12 @@ export const addTotal = (value, ask) => ({
   payload: { value, ask },
 });
 
-export const deletar = (apagar) => ({
+export const deletar = (novasDespesas, totalDeletar) => ({
   type: DELETE,
-  payload: apagar,
+  payload: {
+    novasDespesas,
+    totalDeletar,
+  },
 });
 
 export const moeda = (moedas) => ({

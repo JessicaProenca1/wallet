@@ -9,7 +9,11 @@ class Table extends Component {
     const { id } = event.target;
     const { dispatch, expenses } = this.props;
     const newexpenses = expenses.filter((gasto) => gasto.id !== Number(id));
-    dispatch(deletar(newexpenses));
+    const despesaDeletada = expenses.find((gasto) => gasto.id === Number(id));
+    const api = Object.values(despesaDeletada.exchangeRates);
+    const apiDeletada = api.find((sigla) => (sigla.code === despesaDeletada.currency));
+    const totalDeletado = despesaDeletada.value * apiDeletada.ask;
+    dispatch(deletar(newexpenses, totalDeletado));
   };
 
   render() {
@@ -37,7 +41,7 @@ class Table extends Component {
               const code = Object.values(gasto.exchangeRates);
               const moeda = code.find((sigla) => (sigla.code === gasto.currency));
               return (
-                <tr key={ gasto.description }>
+                <tr key={ gasto.id }>
                   <td>{parseFloat(gasto.value).toFixed(2)}</td>
                   <td>{gasto.description}</td>
                   <td>{gasto.method}</td>
