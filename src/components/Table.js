@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { deletar } from '../redux/actions';
+import { deletar, edit } from '../redux/actions';
 
 class Table extends Component {
   deletarTable = (event) => {
@@ -14,6 +14,15 @@ class Table extends Component {
     const apiDeletada = api.find((sigla) => (sigla.code === despesaDeletada.currency));
     const totalDeletado = despesaDeletada.value * apiDeletada.ask;
     dispatch(deletar(newexpenses, totalDeletado));
+  };
+
+  editTable = (event) => {
+    event.preventDefault();
+    const { id } = event.target;
+    const { dispatch, expenses } = this.props;
+    const editExpenses = expenses.find((gasto) => gasto.id === Number(id));
+    const idEdit = editExpenses.id;
+    dispatch(edit(idEdit));
   };
 
   render() {
@@ -57,6 +66,14 @@ class Table extends Component {
                       onClick={ this.deletarTable }
                     >
                       Deletar
+
+                    </button>
+                    <button
+                      data-testid="edit-btn"
+                      id={ gasto.id }
+                      onClick={ this.editTable }
+                    >
+                      Editar despesa
 
                     </button>
                   </td>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { moedasAPI, addExpensesAPI } from '../redux/actions';
+import { moedasAPI, addExpensesAPI, editExpensesAction } from '../redux/actions';
 import Table from './Table';
 
 const INITIAL_STATE = {
@@ -31,22 +31,52 @@ class WalletForm extends Component {
 
   handleClick = (event) => {
     event.preventDefault();
-    const { dispatch } = this.props;
-    this.setState((prevState) => ({
-      ...INITIAL_STATE,
-      id: prevState.id + 1,
-    }));
-    dispatch(addExpensesAPI({ ...this.state }));
-    this.setState({
-      value: '',
-      description: '',
-    });
+    const { dispatch, editor, idToEdit, expenses } = this.props;
+    const { value, description, method, tag, currency } = this.state;
+    if (editor) {
+      const editExpenses = expenses.find((gasto) => gasto.id === Number(idToEdit));
+      const noEditExpenses = expenses.filter((gasto) => gasto.id !== Number(idToEdit));
+      if (value !== '') {
+        editExpenses.value = value;
+      }
+      if (description !== '') {
+        editExpenses.description = description;
+      }
+      if (description !== '') {
+        editExpenses.currency = currency;
+      }
+      editExpenses.method = method;
+      editExpenses.tag = tag;
+      const newExpenses = [editExpenses, ...noEditExpenses];
+      const total = [];
+      newExpenses.map((newGastos) => {
+        const code = Object.values(newGastos.exchangeRates);
+        const moedaEdit = code.find((sigla) => (sigla.code === newGastos.currency));
+        const totalEdit = newGastos.value * moedaEdit.ask; // valor editado para subtrair do total
+        return total.push(totalEdit);
+      });
+      const newTotal = total.reduce((initialValue, crr) => initialValue + crr);
+      dispatch(editExpensesAction(newExpenses, newTotal));
+      this.setState({
+        value: '',
+        description: '',
+      });
+    } else {
+      this.setState((prevState) => ({
+        ...INITIAL_STATE,
+        id: prevState.id + 1,
+      }));
+      dispatch(addExpensesAPI({ ...this.state }));
+      this.setState({
+        value: '',
+        description: '',
+      });
+    }
   };
 
   render() {
-    const { currencies } = this.props;
+    const { currencies, editor } = this.props;
     const { value, description } = this.state;
-    // if (isFetchingMoedas) return <p>Carregando Carteira</p>;
     return (
       <div>
         <form>
@@ -74,7 +104,7 @@ class WalletForm extends Component {
             label="Moeda: "
             data-testid="currency-input"
             name="currency"
-            onBlur={ this.salvaState }
+            onChange={ this.salvaState }
           >
             Moeda:
             {
@@ -88,7 +118,7 @@ class WalletForm extends Component {
             label="Forma de Pagamento: "
             data-testid="method-input"
             name="method"
-            onBlur={ this.salvaState }
+            onChange={ this.salvaState }
           >
             <option> Dinheiro </option>
             <option> Cartão de crédito </option>
@@ -99,7 +129,7 @@ class WalletForm extends Component {
             label="Categoria: "
             data-testid="tag-input"
             name="tag"
-            onBlur={ this.salvaState }
+            onChange={ this.salvaState }
           >
             <option> Alimentação </option>
             <option> Lazer </option>
@@ -111,7 +141,7 @@ class WalletForm extends Component {
             onClick={ this.handleClick }
             data-testid="add-button"
           >
-            Adicionar despesa
+            { editor ? 'Editar despesa' : 'Adicionar despesa'}
 
           </button>
         </form>
@@ -124,14 +154,18 @@ class WalletForm extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  isFetchingMoedas: state.wallet.isFetchingMoedas,
   currencies: state.wallet.currencies,
+  editor: state.wallet.editor,
+  idToEdit: state.wallet.idToEdit,
+  expenses: state.wallet.expenses,
 });
 
 WalletForm.propTypes = {
-  // isFetchingMoedas: PropTypes.bool.isRequired,
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
   dispatch: PropTypes.func.isRequired,
+  editor: PropTypes.bool.isRequired,
+  idToEdit: PropTypes.number.isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);

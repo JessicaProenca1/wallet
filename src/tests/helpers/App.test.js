@@ -74,13 +74,9 @@ describe('Login TrybeWallet', () => {
     expect(screen.getByTestId('currency-input')).toBeInTheDocument();
   });
 
-  test('Verifica se ao clicar no botão os dados são renderizados na tabela', async () => {
+  test('Verifica se os dados são renderizados na tabela', () => {
     const initialState = {
-      user: {
-        email: 'je.proenca@yahoo.com.br',
-      },
       wallet: {
-        currencies: ['USD'],
         expenses: [
           {
             id: 0,

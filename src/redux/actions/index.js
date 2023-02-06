@@ -1,12 +1,12 @@
 export const email = 'email';
 export const moedaCode = 'moedaCode';
-export const moedasStarted = 'moedasStarted';
 export const moedasSucess = 'moedasSucess';
-export const moedasFail = 'moedasFail';
 export const stateDados = 'stateDados';
 export const ADD_EXPENSES = 'ADD_EXPENSES';
 export const ADD_TOTAL = 'ADD_TOTAL';
 export const DELETE = 'DELETE';
+export const ID_EDIT = 'ID_EDIT';
+export const EXPENSES_EDIT = 'EXPENSES_EDIT';
 
 export const loginAction = (emailsalvo) => ({
   type: email,
@@ -31,13 +31,22 @@ export const deletar = (novasDespesas, totalDeletar) => ({
   },
 });
 
+export const editExpensesAction = (expenses, totalEdit) => ({
+  type: EXPENSES_EDIT,
+  payload: {
+    expenses,
+    totalEdit,
+  },
+});
+
+export const edit = (id) => ({
+  type: ID_EDIT,
+  payload: id,
+});
+
 export const moeda = (moedas) => ({
   type: moedaCode,
   payload: moedas,
-});
-
-export const moedasActionStarted = () => ({
-  type: moedasStarted,
 });
 
 export const moedasActionSucess = (data) => ({
@@ -45,20 +54,13 @@ export const moedasActionSucess = (data) => ({
   payload: data,
 });
 
-export const moedasActionFail = (error) => ({
-  type: moedasFail,
-  payload: error,
-});
-
 export const moedasAPI = () => async (dispatch) => {
-  dispatch(moedasActionStarted());
   fetch('https://economia.awesomeapi.com.br/json/all')
     .then((response) => response.json())
     .then((data) => {
       delete data.USDT;
       dispatch(moedasActionSucess(data));
-    })
-    .catch((error) => dispatch(moedasActionFail(error)));
+    });
 };
 
 export const addExpensesAPI = (expenses) => async (dispatch) => {
@@ -66,6 +68,15 @@ export const addExpensesAPI = (expenses) => async (dispatch) => {
     .then((response) => response.json())
     .then((data) => {
       delete data.USDT;
+      if (expenses.currency === '') {
+        expenses.currency = 'USD';
+      }
+      if (expenses.method === '') {
+        expenses.method = 'Dinheiro';
+      }
+      if (expenses.tag === '') {
+        expenses.tag = 'Alimentação';
+      }
       const dadosCode = Object.values(data)
         .find((code) => code.code === expenses.currency);
       const cotacao = dadosCode.ask;
