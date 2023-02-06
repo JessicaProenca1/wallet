@@ -76,9 +76,10 @@ class WalletForm extends Component {
             name="currency"
             onBlur={ this.salvaState }
           >
+            Moeda:
             {
               currencies.map((option, index) => (
-                <option key={ index }>{ option }</option>
+                <option key={ index } value={ option }>{ option }</option>
               ))
             }
           </select>

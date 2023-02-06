@@ -42,14 +42,14 @@ class Table extends Component {
               const moeda = code.find((sigla) => (sigla.code === gasto.currency));
               return (
                 <tr key={ gasto.id }>
-                  <td>{parseFloat(gasto.value).toFixed(2)}</td>
-                  <td>{gasto.description}</td>
-                  <td>{gasto.method}</td>
-                  <td>{ moeda.name }</td>
-                  <td>{parseFloat(moeda.ask).toFixed(2)}</td>
+                  <td data-testid="value-table">{parseFloat(gasto.value).toFixed(2)}</td>
+                  <td data-testid="description-table">{gasto.description}</td>
+                  <td data-testid="method-table">{gasto.method}</td>
+                  <td data-testid="name-table">{ moeda.name }</td>
+                  <td data-testid="ask-table">{parseFloat(moeda.ask).toFixed(2)}</td>
                   <td>{parseFloat(moeda.ask * gasto.value).toFixed(2)}</td>
                   <td>Real</td>
-                  <td>{gasto.tag}</td>
+                  <td data-testid="tag-table">{gasto.tag}</td>
                   <td>
                     <button
                       data-testid="delete-btn"

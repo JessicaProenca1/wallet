@@ -3,17 +3,17 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from '../../App';
 import { renderWithRouterAndRedux } from './renderWith';
-import mockFetch from './mockFetch';
+import mockData from './mockData';
+import Table from '../../components/Table';
+
+beforeEach(() => {
+  jest.spyOn(global, 'fetch').mockResolvedValue(
+    { json: jest.fn().mockResolvedValue(mockData) },
+  );
+});
 
 describe('Login TrybeWallet', () => {
   const meuEmail = 'je.proenca@yahoo.com.br';
-  beforeEach(() => {
-    global.fetch = jest.fn(mockFetch);
-  });
-
-  afterEach(() => {
-    global.fetch.mockClear();
-  });
 
   test('Verifica se a tela Login é renderizada corretamente', () => {
     renderWithRouterAndRedux(<App />);
@@ -66,32 +66,38 @@ describe('Login TrybeWallet', () => {
     expect(screen.getByTestId('value-input')).toBeInTheDocument();
   });
 
-  // test('Verifica se é renderizada a carteira com os gastos', () => {
-  //   const initialState = {
-  //     wallet: {
-  //       currencies: [],
-  //       expenses: [
-  //         {
-  //           id: 0,
-  //           value: '5',
-  //           description: 'Ossinho da Pedrita',
-  //           currency: 'USD',
-  //           method: 'Dinheiro',
-  //           tag: 'Alimentação',
-  //         },
-  //       ],
-  //     },
-  //   };
+  test('Verifica se a API é chamada e se renderiza as moedas', () => {
+    const initialEntries = ['/carteira'];
 
-  //   const firstEndpoint = 'https://economia.awesomeapi.com.br/json/all';
-  //   renderWithRouterAndRedux(<App />, { initialEntries: ['/carteira'], initialState });
-  //   expect(global.fetch).toHaveBeenCalledTimes(1);
-  //   expect(global.fetch).toHaveBeenCalledWith(firstEndpoint);
+    renderWithRouterAndRedux(<App />, { initialEntries });
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId('currency-input')).toBeInTheDocument();
+  });
 
-  //   expect(screen.getByText('5')).toBeInTheDocument();
-  //   expect(screen.getByText('Ossinho da Pedrita')).toBeInTheDocument();
-  //   expect(screen.getByText('USD')).toBeInTheDocument();
-  //   expect(screen.getByText('Dinheiro')).toBeInTheDocument();
-  //   expect(screen.getByText('Alimentação')).toBeInTheDocument();
-  // });
+  test('Verifica se ao clicar no botão os dados são renderizados na tabela', async () => {
+    const initialState = {
+      user: {
+        email: 'je.proenca@yahoo.com.br',
+      },
+      wallet: {
+        currencies: ['USD'],
+        expenses: [
+          {
+            id: 0,
+            value: '5',
+            currency: 'USD',
+            method: 'Dinheiro',
+            tag: 'Alimentação',
+            description: 'Ossinho da Pedrita',
+            exchangeRates: mockData,
+          }],
+      },
+    };
+    renderWithRouterAndRedux(<Table />, { initialState });
+    expect(screen.getByTestId('value-table')).toBeInTheDocument('5');
+    expect(screen.getByTestId('description-table')).toBeInTheDocument('Ossinho da Pedrita');
+    expect(screen.getByTestId('method-table')).toBeInTheDocument('Dinheiro');
+    expect(screen.getByTestId('name-table')).toBeInTheDocument('Dólar Americano/Real Brasileiro');
+    expect(screen.getByTestId('tag-table')).toBeInTheDocument('Alimentação');
+  });
 });
