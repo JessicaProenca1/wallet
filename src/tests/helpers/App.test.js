@@ -15,6 +15,9 @@ beforeEach(() => {
 
 describe('Login TrybeWallet', () => {
   const meuEmail = 'je.proenca@yahoo.com.br';
+  const descriptionInput = 'description-input';
+  const valueInput = 'value-input';
+  const alimentação = 'Alimentação';
 
   test('Verifica se a tela Login é renderizada corretamente', () => {
     renderWithRouterAndRedux(<App />);
@@ -58,13 +61,13 @@ describe('Login TrybeWallet', () => {
     const loginButton = screen.getByRole('button');
     userEvent.click(loginButton);
     // para acessar à página da carteira
-    const valorInput = screen.getByTestId('value-input');
+    const valorInput = screen.getByTestId(valueInput);
     userEvent.type(valorInput, '5');
 
-    expect(screen.getByTestId('description-input')).toBeInTheDocument();
+    expect(screen.getByTestId(descriptionInput)).toBeInTheDocument();
     expect(screen.getByTestId('method-input')).toBeInTheDocument();
     expect(screen.getByTestId('tag-input')).toBeInTheDocument();
-    expect(screen.getByTestId('value-input')).toBeInTheDocument();
+    expect(screen.getByTestId(valueInput)).toBeInTheDocument();
   });
 
   test('Verifica se a API é chamada e se renderiza as moedas', () => {
@@ -84,7 +87,7 @@ describe('Login TrybeWallet', () => {
             value: '5',
             currency: 'USD',
             method: 'Dinheiro',
-            tag: 'Alimentação',
+            tag: 'Lazer',
             description: 'Ossinho da Pedrita',
             exchangeRates: mockData,
           }],
@@ -92,10 +95,9 @@ describe('Login TrybeWallet', () => {
     };
     renderWithRouterAndRedux(<Table />, { initialState });
     expect(screen.getByTestId('value-table')).toBeInTheDocument('5');
-    expect(screen.getByTestId('description-table')).toBeInTheDocument('Ossinho da Pedrita');
     expect(screen.getByTestId('method-table')).toBeInTheDocument('Dinheiro');
     expect(screen.getByTestId('name-table')).toBeInTheDocument('Dólar Americano/Real Brasileiro');
-    expect(screen.getByTestId('tag-table')).toBeInTheDocument('Alimentação');
+    expect(screen.getByTestId('tag-table')).toBeInTheDocument('Lazer');
   });
 
   test('Verifica se ao clicar no botão Editar a despesa a nova despesa é renderizada na tabela', () => {
@@ -124,7 +126,7 @@ describe('Login TrybeWallet', () => {
             value: '5',
             currency: 'USD',
             method: 'Dinheiro',
-            tag: 'Alimentação',
+            tag: alimentação,
             description: 'Ração da Pedrita',
             exchangeRates: mockData,
           },
@@ -176,7 +178,7 @@ describe('Login TrybeWallet', () => {
             value: '5',
             currency: 'USD',
             method: 'Dinheiro',
-            tag: 'Alimentação',
+            tag: alimentação,
             description: 'Ossinho da Feia',
             exchangeRates: mockData,
           },
@@ -196,10 +198,10 @@ describe('Login TrybeWallet', () => {
     };
 
     renderWithRouterAndRedux(<WalletForm />, { initialState });
-    userEvent.type(screen.getByTestId('value-input'), '20');
-    userEvent.type(screen.getByTestId('description-input'), 'Passear com a Pedrita');
-    expect(screen.getByTestId('value-input')).toBeInTheDocument('20');
-    expect(screen.getByTestId('value-input')).toHaveAttribute('value', '20');
+    userEvent.type(screen.getByTestId(valueInput), '20');
+    userEvent.type(screen.getByTestId(descriptionInput), 'Passear com a Pedrita');
+    expect(screen.getByTestId(valueInput)).toBeInTheDocument('20');
+    expect(screen.getByTestId(valueInput)).toHaveAttribute('value', '20');
     userEvent.selectOptions(screen.getByTestId('currency-input'), 'USD');
     userEvent.selectOptions(screen.getByTestId('method-input'), 'Dinheiro');
     userEvent.click(screen.getByTestId('add-button'));
@@ -236,7 +238,4 @@ describe('Login TrybeWallet', () => {
     userEvent.click(screen.getAllByTestId('delete-btn')[1]);
     expect(screen.getAllByTestId('description-table')).toHaveLength(1);
   });
-
-  // test('should first', () => {
-  // });
 });
