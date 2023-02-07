@@ -5,6 +5,7 @@ import App from '../../App';
 import { renderWithRouterAndRedux } from './renderWith';
 import mockData from './mockData';
 import Table from '../../components/Table';
+import WalletForm from '../../components/WalletForm';
 
 beforeEach(() => {
   jest.spyOn(global, 'fetch').mockResolvedValue(
@@ -96,4 +97,146 @@ describe('Login TrybeWallet', () => {
     expect(screen.getByTestId('name-table')).toBeInTheDocument('Dólar Americano/Real Brasileiro');
     expect(screen.getByTestId('tag-table')).toBeInTheDocument('Alimentação');
   });
+
+  test('Verifica se ao clicar no botão Editar a despesa a nova despesa é renderizada na tabela', () => {
+    const initialState = {
+      wallet: {
+        currencies: [
+          'USD',
+          'CAD',
+          'GBP',
+          'ARS',
+          'BTC',
+          'LTC',
+          'EUR',
+          'JPY',
+          'CHF',
+          'AUD',
+          'CNY',
+          'ILS',
+          'ETH',
+          'XRP',
+          'DOGE',
+        ],
+        expenses: [
+          {
+            id: 0,
+            value: '5',
+            currency: 'USD',
+            method: 'Dinheiro',
+            tag: 'Alimentação',
+            description: 'Ração da Pedrita',
+            exchangeRates: mockData,
+          },
+          {
+            id: 1,
+            value: '10',
+            currency: 'CAD',
+            method: 'Dinheiro',
+            tag: 'Saúde',
+            description: 'Banho da Pedrita',
+            exchangeRates: mockData,
+          },
+        ],
+      },
+    };
+    renderWithRouterAndRedux(<Table />, { initialState });
+    expect(screen.getAllByTestId('edit-btn')).toHaveLength(2);
+    userEvent.click(screen.getAllByTestId('edit-btn')[0]);
+
+    renderWithRouterAndRedux(<WalletForm />);
+    userEvent.type(screen.getByTestId('description-input'), 'Ossinho da Pedrita que é mais importante');
+    userEvent.click(screen.getByTestId('add-button'));
+    expect(screen.getAllByTestId('description-table')[0]).toBeInTheDocument('Ossinho da Pedrita que é mais importante');
+  });
+
+  test('Verifica se a edição funciona', () => {
+    const initialState = {
+      wallet: {
+        currencies: [
+          'USD',
+          'CAD',
+          'GBP',
+          'ARS',
+          'BTC',
+          'LTC',
+          'EUR',
+          'JPY',
+          'CHF',
+          'AUD',
+          'CNY',
+          'ILS',
+          'ETH',
+          'XRP',
+          'DOGE',
+        ],
+        expenses: [
+          {
+            id: 0,
+            value: '5',
+            currency: 'USD',
+            method: 'Dinheiro',
+            tag: 'Alimentação',
+            description: 'Ossinho da Feia',
+            exchangeRates: mockData,
+          },
+          {
+            id: 1,
+            value: '10',
+            currency: 'CAD',
+            method: '',
+            tag: '',
+            description: '',
+            exchangeRates: mockData,
+          },
+        ],
+        editor: true,
+        idToEdit: 1,
+      },
+    };
+
+    renderWithRouterAndRedux(<WalletForm />, { initialState });
+    userEvent.type(screen.getByTestId('value-input'), '20');
+    userEvent.type(screen.getByTestId('description-input'), 'Passear com a Pedrita');
+    expect(screen.getByTestId('value-input')).toBeInTheDocument('20');
+    expect(screen.getByTestId('value-input')).toHaveAttribute('value', '20');
+    userEvent.selectOptions(screen.getByTestId('currency-input'), 'USD');
+    userEvent.selectOptions(screen.getByTestId('method-input'), 'Dinheiro');
+    userEvent.click(screen.getByTestId('add-button'));
+    expect(screen.getAllByTestId('method-table')[1]).toBeInTheDocument('Dinheiro');
+  });
+
+  test('Verifica se ao clicar no botão Excluir a despesa não renderiza na tela', () => {
+    const initialState = {
+      wallet: {
+        expenses: [
+          {
+            id: 0,
+            value: '5',
+            currency: 'USD',
+            method: 'Dinheiro',
+            tag: 'Alimentação',
+            description: 'Ração da Pedrita',
+            exchangeRates: mockData,
+          },
+          {
+            id: 1,
+            value: '10',
+            currency: 'CAD',
+            method: 'Dinheiro',
+            tag: 'Saúde',
+            description: 'Banho da Pedrita',
+            exchangeRates: mockData,
+          },
+        ],
+      },
+    };
+    renderWithRouterAndRedux(<Table />, { initialState });
+    expect(screen.getAllByTestId('delete-btn')).toHaveLength(2);
+    userEvent.click(screen.getAllByTestId('delete-btn')[1]);
+    expect(screen.getAllByTestId('description-table')).toHaveLength(1);
+  });
+
+  // test('should first', () => {
+  // });
 });

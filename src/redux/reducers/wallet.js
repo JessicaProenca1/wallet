@@ -1,6 +1,5 @@
 import {
   moedasSucess,
-  moedaCode,
   ADD_EXPENSES,
   ADD_TOTAL,
   DELETE,
@@ -49,11 +48,6 @@ const wallet = (state = INITIAL_STATE_WALLET, action) => {
       editor: false,
       expenses: action.payload.expenses,
       total: action.payload.totalEdit,
-    };
-  case moedaCode:
-    return {
-      ...state,
-      currencies: Object.values({ ...action.payload }),
     };
   case moedasSucess:
     return {

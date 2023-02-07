@@ -70,7 +70,7 @@ class Login extends Component {
         <button
           type="submit"
           id="btn"
-          disabled={ (emailValido === true && senhaValida === true) ? null : 'disabled' }
+          disabled={ (emailValido && senhaValida) ? null : 'disabled' }
           onClick={ this.clickBtn }
         >
           Entrar

@@ -52,7 +52,7 @@ class WalletForm extends Component {
       newExpenses.map((newGastos) => {
         const code = Object.values(newGastos.exchangeRates);
         const moedaEdit = code.find((sigla) => (sigla.code === newGastos.currency));
-        const totalEdit = newGastos.value * moedaEdit.ask; // valor editado para subtrair do total
+        const totalEdit = newGastos.value * moedaEdit.ask; // valor de cada despesa após o edit
         return total.push(totalEdit);
       });
       const newTotal = total.reduce((initialValue, crr) => initialValue + crr);
@@ -104,12 +104,12 @@ class WalletForm extends Component {
             label="Moeda: "
             data-testid="currency-input"
             name="currency"
-            onChange={ this.salvaState }
+            onBlur={ this.salvaState }
           >
             Moeda:
             {
               currencies.map((option, index) => (
-                <option key={ index } value={ option }>{ option }</option>
+                <option key={ index } name={ option }>{ option }</option>
               ))
             }
           </select>

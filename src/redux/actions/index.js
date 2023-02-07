@@ -1,5 +1,4 @@
 export const email = 'email';
-export const moedaCode = 'moedaCode';
 export const moedasSucess = 'moedasSucess';
 export const stateDados = 'stateDados';
 export const ADD_EXPENSES = 'ADD_EXPENSES';
@@ -44,11 +43,6 @@ export const edit = (id) => ({
   payload: id,
 });
 
-export const moeda = (moedas) => ({
-  type: moedaCode,
-  payload: moedas,
-});
-
 export const moedasActionSucess = (data) => ({
   type: moedasSucess,
   payload: data,
@@ -70,12 +64,6 @@ export const addExpensesAPI = (expenses) => async (dispatch) => {
       delete data.USDT;
       if (expenses.currency === '') {
         expenses.currency = 'USD';
-      }
-      if (expenses.method === '') {
-        expenses.method = 'Dinheiro';
-      }
-      if (expenses.tag === '') {
-        expenses.tag = 'Alimentação';
       }
       const dadosCode = Object.values(data)
         .find((code) => code.code === expenses.currency);
