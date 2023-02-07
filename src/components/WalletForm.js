@@ -36,15 +36,9 @@ class WalletForm extends Component {
     if (editor) {
       const editExpenses = expenses.find((gasto) => gasto.id === Number(idToEdit));
       const noEditExpenses = expenses.filter((gasto) => gasto.id !== Number(idToEdit));
-      if (value !== '') {
-        editExpenses.value = value;
-      }
-      if (description !== '') {
-        editExpenses.description = description;
-      }
-      if (description !== '') {
-        editExpenses.currency = currency;
-      }
+      editExpenses.value = value;
+      editExpenses.description = description;
+      editExpenses.currency = currency;
       editExpenses.method = method;
       editExpenses.tag = tag;
       const newExpenses = [editExpenses, ...noEditExpenses];
