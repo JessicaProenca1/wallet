@@ -1,8 +1,13 @@
+/* eslint-disable react/jsx-max-depth */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 import { moedasAPI, addExpensesAPI, editExpensesAction } from '../redux/actions';
-import Table from './Table';
+import TableComponent from './Table';
 
 const INITIAL_STATE = {
   id: 0,
@@ -73,74 +78,109 @@ class WalletForm extends Component {
     const { value, description } = this.state;
     return (
       <div>
-        <form>
-          <input
-            label="Valor: "
-            type="number"
-            data-testid="value-input"
-            onChange={ this.salvaState }
-            placeholder="Digite o valor"
-            name="value"
-            value={ value }
-          />
+        <Form
+          className="container mx-sm-auto"
+          style={ { margin: '5rem', alignItems: 'flex-end', maxWidth: '70%' } }
+        >
+          <Row className="mb-3">
+            <Form.Group
+              as={ Col }
+            >
+              <Form.Label>Valor da Despesa</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="Digite o valor"
+                data-testid="value-input"
+                onChange={ this.salvaState }
+                name="value"
+                value={ value }
+              />
+            </Form.Group>
 
-          <input
-            label="Descricao: "
-            type="text"
-            data-testid="description-input"
-            onChange={ this.salvaState }
-            placeholder="Digite a descrição da despesa"
-            name="description"
-            value={ description }
-          />
+            <Form.Group
+              as={ Col }
 
-          <select
-            label="Moeda: "
-            data-testid="currency-input"
-            name="currency"
-            onBlur={ this.salvaState }
-          >
-            Moeda:
-            {
-              currencies.map((option, index) => (
-                <option key={ index } name={ option }>{ option }</option>
-              ))
-            }
-          </select>
+            >
+              <Form.Label>Descrição</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Digite a descrição"
+                data-testid="description-input"
+                onChange={ this.salvaState }
+                name="description"
+                value={ description }
+              />
+            </Form.Group>
 
-          <select
-            label="Forma de Pagamento: "
-            data-testid="method-input"
-            name="method"
-            onChange={ this.salvaState }
-          >
-            <option> Dinheiro </option>
-            <option> Cartão de crédito </option>
-            <option> Cartão de débito</option>
-          </select>
+            <Form.Group
+              as={ Col }
 
-          <select
-            label="Categoria: "
-            data-testid="tag-input"
-            name="tag"
-            onChange={ this.salvaState }
-          >
-            <option> Alimentação </option>
-            <option> Lazer </option>
-            <option> Trabalho </option>
-            <option> Transporte </option>
-            <option> Saúde </option>
-          </select>
-          <button
-            onClick={ this.handleClick }
-            data-testid="add-button"
-          >
-            { editor ? 'Editar despesa' : 'Adicionar despesa'}
+            >
+              <Form.Label>Tag</Form.Label>
+              <Form.Select
+                data-testid="tag-input"
+                name="tag"
+                onChange={ this.salvaState }
+              >
+                <option className="loginColor"> Alimentação </option>
+                <option className="loginColor"> Lazer </option>
+                <option className="loginColor"> Trabalho </option>
+                <option className="loginColor"> Transporte </option>
+                <option className="loginColor"> Saúde </option>
+              </Form.Select>
+            </Form.Group>
 
-          </button>
-        </form>
+            <Form.Group
+              as={ Col }
+
+            >
+              <Form.Label>Moeda</Form.Label>
+              <Form.Select
+                data-testid="currency-input"
+                name="currency"
+                onChange={ this.salvaState }
+              >
+                {
+                  currencies.map((option, index) => (
+                    <option
+                      className="loginColor"
+                      key={ index }
+                      name={ option }
+                    >
+                      { option }
+                    </option>
+                  ))
+                }
+              </Form.Select>
+            </Form.Group>
+            <Form.Group
+              as={ Col }
+
+            >
+              <Form.Label>Forma de Pagamento</Form.Label>
+              <Form.Select
+                data-testid="method-input"
+                name="method"
+                onChange={ this.salvaState }
+              >
+                <option className="loginColor"> Dinheiro </option>
+                <option className="loginColor"> Cartão de crédito </option>
+                <option className="loginColor"> Cartão de débito</option>
+              </Form.Select>
+            </Form.Group>
+            <Button
+              as={ Col }
+              onClick={ this.handleClick }
+              data-testid="add-button"
+              style={ { alignItems: 'flex-end', marginTop: '30px' } }
+              className={ (editor ? 'editButton' : 'loginButton') }
+            >
+              { editor ? 'Editar despesa' : 'Adicionar despesa'}
+            </Button>
+          </Row>
+        </Form>
         <section>
-          <Table />
+          <TableComponent />
         </section>
       </div>
     );

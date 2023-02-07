@@ -1,18 +1,39 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 class Header extends Component {
   render() {
     const { email, total } = this.props;
-    // criar nova action disparada pelo click. Criar reducer para ela e nesse reducer fazer a logica da soma.
     return (
-      <div>
-        <h1>Minhas Despesas</h1>
-        <h3 data-testid="email-field">{ email }</h3>
-        <h3 data-testid="total-field">{ (parseFloat(total).toFixed(2)) }</h3>
-        <h3 data-testid="header-currency-field">BRL</h3>
-      </div>
+      <ListGroup
+        horizontal
+        variant="flush"
+        className="container mx-sm-auto"
+        style={ { margin: '5rem', justifyContent: 'center', alignItems: 'stretch' } }
+      >
+        <ListGroup.Item
+          className="display-4 loginColor"
+        >
+          Minhas Despesas
+        </ListGroup.Item>
+        <ListGroup.Item
+          className="display-7 loginColor"
+          data-testid="email-field"
+          style={ { display: 'flex', alignItems: 'center' } }
+        >
+          { email }
+
+        </ListGroup.Item>
+        <ListGroup.Item
+          className="display-7 loginColor"
+          data-testid="total-field"
+          style={ { display: 'flex', alignItems: 'center', flexWrap: 'nowrap' } }
+        >
+          { `Total dos gastos: R$ ${(parseFloat(total).toFixed(2))}` }
+        </ListGroup.Item>
+      </ListGroup>
     );
   }
 }

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Table from 'react-bootstrap/Table';
+import Button from 'react-bootstrap/Button';
 import { deletar, edit } from '../redux/actions';
 
-class Table extends Component {
+class TableComponent extends Component {
   deletarTable = (event) => {
     event.preventDefault();
     const { id } = event.target;
@@ -29,11 +31,14 @@ class Table extends Component {
     const { expenses } = this.props;
 
     return (
-      <section>
+      <section
+        className="container"
+        style={ { justifyContent: 'center', marginLeft: '150px' } }
+      >
         <h2>Tabela de Despesas</h2>
-        <table>
+        <Table striped style={ { width: '100rem', justifyContent: 'center' } }>
           <thead>
-            <tr>
+            <tr className="loginColor">
               <th>Valor</th>
               <th>Descrição</th>
               <th>Método de pagamento</th>
@@ -60,28 +65,30 @@ class Table extends Component {
                   <td>Real</td>
                   <td data-testid="tag-table">{gasto.tag}</td>
                   <td>
-                    <button
+                    <Button
                       data-testid="delete-btn"
                       id={ gasto.id }
                       onClick={ this.deletarTable }
+                      className="deleteButton"
                     >
                       Deletar
 
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       data-testid="edit-btn"
                       id={ gasto.id }
                       onClick={ this.editTable }
+                      className="editButton"
                     >
                       Editar despesa
 
-                    </button>
+                    </Button>
                   </td>
                 </tr>
               );
             })}
           </tbody>
-        </table>
+        </Table>
       </section>
     );
   }
@@ -91,9 +98,9 @@ const mapStateToProps = (state) => ({
   expenses: state.wallet.expenses,
 });
 
-Table.propTypes = {
+TableComponent.propTypes = {
   expenses: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps)(Table);
+export default connect(mapStateToProps)(TableComponent);

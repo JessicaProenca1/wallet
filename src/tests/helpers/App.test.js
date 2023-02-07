@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../../App';
 import { renderWithRouterAndRedux } from './renderWith';
 import mockData from './mockData';
-import Table from '../../components/Table';
+import TableComponent from '../../components/Table';
 import WalletForm from '../../components/WalletForm';
 
 beforeEach(() => {
@@ -93,7 +93,7 @@ describe('Login TrybeWallet', () => {
           }],
       },
     };
-    renderWithRouterAndRedux(<Table />, { initialState });
+    renderWithRouterAndRedux(<TableComponent />, { initialState });
     expect(screen.getByTestId('value-table')).toBeInTheDocument('5');
     expect(screen.getByTestId('method-table')).toBeInTheDocument('Dinheiro');
     expect(screen.getByTestId('name-table')).toBeInTheDocument('Dólar Americano/Real Brasileiro');
@@ -142,7 +142,7 @@ describe('Login TrybeWallet', () => {
         ],
       },
     };
-    renderWithRouterAndRedux(<Table />, { initialState });
+    renderWithRouterAndRedux(<TableComponent />, { initialState });
     expect(screen.getAllByTestId('edit-btn')).toHaveLength(2);
     userEvent.click(screen.getAllByTestId('edit-btn')[0]);
 
@@ -233,7 +233,7 @@ describe('Login TrybeWallet', () => {
         ],
       },
     };
-    renderWithRouterAndRedux(<Table />, { initialState });
+    renderWithRouterAndRedux(<TableComponent />, { initialState });
     expect(screen.getAllByTestId('delete-btn')).toHaveLength(2);
     userEvent.click(screen.getAllByTestId('delete-btn')[1]);
     expect(screen.getAllByTestId('description-table')).toHaveLength(1);
