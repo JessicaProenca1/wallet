@@ -62,9 +62,6 @@ export const addExpensesAPI = (expenses) => async (dispatch) => {
     .then((response) => response.json())
     .then((data) => {
       delete data.USDT;
-      if (expenses.currency === '') {
-        expenses.currency = 'USD';
-      }
       const dadosCode = Object.values(data)
         .find((code) => code.code === expenses.currency);
       const cotacao = dadosCode.ask;
